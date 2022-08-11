@@ -50,7 +50,7 @@ class DashboardController extends Controller
             // wearmont = mengambil bulan
             // object colection untuk menipulasi isi data
             //list date menjadi aray
-            "list_date" => Penjualan::selectRaw("DATE_FORMAT(created_at, '%d %M %Y') AS list_day")->whereMonth("created_at", date("m"))->groupBy("created_at")->get()->map(fn($produk) => $produk->list_day)->unique()->values()->toArray(),
+            // "list_date" => Penjualan::selectRaw("DATE_FORMAT(created_at, '%d %M %Y') AS list_day")->whereMonth("created_at", date("m"))->groupBy("created_at")->get()->map(fn($produk) => $produk->list_day)->unique()->values()->toArray(),
             // List price adalah data list harga per masing-masing tanggal. Menggunakan select raw yang mana bulan nya adalah bulan saat ini.
             // lalu data diubah menggunakan map, lalu ambil unique dan diubah menjadi array kembali
             "list_price" => Penjualan::selectRaw("SUM(bayar) AS bayar")->whereMonth("created_at", date("m"))->groupByRaw("DAY(created_at)")->get()->map(fn($produk) => $produk->bayar)->toArray(),
