@@ -7,15 +7,18 @@
   <div class="card">
     <div class="card-body login-card-body">
     <div class="login-logo">
+      <!-- / = untuk mengakhiri ref dari logi ke yanag lain nya -->
     <a href="{{ url('/') }}">
         <img src="img/logoo.png" alt="logo.png" width="150">
+
 </a>
     </div>
       <form action="{{ route('login') }}" method="post">
-          <!-- @csrf adalah token supaya tidak kadaluarsa -->
+          <!-- @csrf adalah token supaya tidak kadaluarsa  kalau tidak ada token maka akan not fone-->
           @csrf
           <!-- "{{ old('email') }}" di bagian bawah untuk memunculkan tetap pada login jikalau salah -->
         <div>
+          <!-- unutuk menambahkan eror email diawali dengan bawah has-error  -->
           <div class="input-group mb-3 @error('email') has-error @enderror">
           <input type="email" name="email" class="form-control" placeholder="Email" required value="{{ old('email') }}" autofocus>
           <div class="input-group-append">
@@ -25,7 +28,7 @@
           </div>
           </div>
           <p>
-          <!-- untuk menambahkan message error -->
+          <!-- untuk menambahkan message error bawaan laravel -->
             @error('email')
              <span calss="help-block">{{ $message }}</span>
              @enderror

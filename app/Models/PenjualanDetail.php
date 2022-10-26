@@ -15,6 +15,7 @@ class PenjualanDetail extends Model
 
     public function product()
     {
+        //terkait dengan id_prodak // table penyambung yang punya foreign key
         return $this->belongsTo(Produk::class, "id_produk", "id_produk");
     }
 }

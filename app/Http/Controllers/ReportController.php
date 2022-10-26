@@ -19,6 +19,7 @@ class ReportController extends Controller
         $date_expired = Carbon::now()->addMonth(1);
         $data = [
             "count_out_stok" => Produk::where("stok", 0)->count(),
+            //limit dibatasi setiap 10 
             "product_out_stok" => Produk::where("stok", 0)->limit(10)->get(),
             "product_approach_stok" => Produk::orderBy("stok", "ASC")->where("stok", "<", 7)->get(),
             "product_expires" => Produk::whereDate("tgl_exp", "<=", $date_expired)->orderBy("tgl_exp", "ASC")->limit(10)->get()
@@ -29,6 +30,10 @@ class ReportController extends Controller
 
     public function data_product_transaction()
     {
+        //diman semua data penjualan detail diambil terus dimasukan kedalam fariable $produk 
+        //query builder
+        // p & pj = table produk (table . colom)
+        //AS = sebagai
         $produk = PenjualanDetail::select([
                     "penjualan_detail.*", "p.nama_produk", "pj.no_penjualan"
                 ])->join("produk AS p", "p.id_produk", "penjualan_detail.id_produk")

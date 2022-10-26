@@ -1,13 +1,19 @@
 let Penjualan = {
+  //menyimoan data produk untuk dicaro
   listSearchProduct: [],
+  //url saat ini
   baseUrl: window.location.origin,
+  //untuk menndakan baris keberapa
   indexRow: 1,
+  //mengambil prodak yanag iambil
   choiceProduk: [],
+  //properti untuk menyimpan produkyanag dipilih
   listChoiceProduk: [],
-
+  //untuk menyimpan total tagihan
   totalOrder: 0,
+  //total untuk penyimpaann yng iudah dibayar
   totalPayment: 0,
-
+//untuk delay
   delay(fn, ms) {
     let timer;
     return function(...args) {
@@ -16,6 +22,7 @@ let Penjualan = {
     }
   },
 
+  // pengecekan keseluruhan untuk submit pengecekan pembayarn
   checkSubmit() {
     if (Penjualan.totalOrder > 0) {
       if (Penjualan.totalPayment >= Penjualan.totalOrder) {
@@ -27,7 +34,7 @@ let Penjualan = {
       alert("Anda belum memasukan barang!");
     }
   },
-
+  // membersihkan hasil pencarian ketika pencarian pada produk pembelian
   hideResult() {
     let listResults = document.querySelectorAll(".listSearch");
 
@@ -36,21 +43,26 @@ let Penjualan = {
     });
   },
 
+  //penncaraian data 
   initSearchProduct() {
+    //keyup = untuk memerintahkan satu fungsi dan dibungkus oleh fungsio delay untuk mejeda ke carian server
     document.querySelector("#inputKodeProduk").addEventListener("keyup", Penjualan.delay(function() {
       Penjualan.searchProduct();
+      //0.5 detik
     }, 1000));
+    // blur selesi tulis
     document.querySelector("#inputKodeProduk").addEventListener("blur", Penjualan.delay(function() {
       Penjualan.hideResult();
     }, 500));
   },
 
+  //untuk recues produk  server
   async searchProduct() {
     Penjualan.listSearchProduct = [];
     let kodeProduk = document.querySelector("#inputKodeProduk").value;
     
     let request = await fetch(`${Penjualan.baseUrl}/penjualan/produk/search?kode=${kodeProduk}`);
-
+    //ketika aman ma disimpan
     if (request.ok) {
       let response = await request.json();
       if (response.status) {
@@ -60,21 +72,25 @@ let Penjualan = {
     }
   },
 
+  //untuk akes div kosong menggambar hasil data ynag diterim dari server
   renderSearchProduct() {
     let template = document.querySelector("#templateSearchProduk");
-    let html = "";
 
+    let html = "";
+    // jika data nay ada maka akan di temukan dan ditampilkan
     if (Penjualan.listSearchProduct.length > 0) {
       Penjualan.listSearchProduct.forEach(item => {
+        //ketika data di pilih makan akan di munculkan choicedProduct
         html += `<p onclick="Penjualan.choicedProduct('${item.id_produk}')">${item.kode_produk} - ${item.nama_produk} - ${item.tgl_exp}</p>`;
       });
     } else {
+      //jika tidak maka akn muncul seperti ini
       html += `<p>Produk tidak ditemukan!</p>`;
     }
-
+    //di reander html
     template.innerHTML = html;
   },
-
+// numberin doang 
   numberFormat(value) {
     if (value != null) {
       if (value.toString()[0] == "-") {
@@ -98,7 +114,7 @@ let Penjualan = {
       return number.replace(".", "");
     }
   },
-
+//untuk mengubah value number format menghapus mengubah
   bindNumberFormat() {
     let listInputNumber = document.querySelectorAll(".number-format");
     for (let i = 0; i < listInputNumber.length; i++) {
@@ -109,28 +125,33 @@ let Penjualan = {
       });
     }
   },
-
+  //membayar coma kaan dihapus, dan supay abisa dibitung supay di anggap string bukan integer
   deleteComma(value) {
     return value.toString().replace(/,/g, "");
   },
-
+  //untuk menemukan prodak untuk mengambil berdasarkan id nya
   choicedProduct(idProduk) {
     let findProduk = Penjualan.listSearchProduct.find(item => item.id_produk == idProduk);
     
     if (findProduk) {
+      //ketika ketemu amakan akan di tampilkan untuk render
       Penjualan.choiceProduk = findProduk;
       Penjualan.renderChoiceProduk();
     }
   },
 
+  //untuk eksekusi roduk yanag telah di pilih lalu digambarkan ke table]
   renderChoiceProduk() {
     let html = Penjualan.templateRowProduk(Penjualan.choiceProduk);
+    //untuk insert tempal ke kuery
     document.querySelector("#templateListProduk").insertAdjacentHTML("beforeend", html);
+     //untuk format rupiaah
     Penjualan.bindNumberFormat();
+   
     Penjualan.reIndexRow();
     Penjualan.calculateAll();
   },
-
+  //untuk menmpilkan tek html tamble dan mengiri variable data 
   templateRowProduk(data) {
     let html = "";
     html += `<tr class="list-row">`;
@@ -149,7 +170,7 @@ let Penjualan = {
 
     return html;
   },
-
+  // untuk menginput data perhuitungan
   calculate() {
     let listJumlah = document.querySelectorAll(".input-jumlah");
     let listHargaJual = document.querySelectorAll(".input-harga-jual");
@@ -168,17 +189,18 @@ let Penjualan = {
     Penjualan.totalOrder = total;
     document.querySelector("#inputTotalHarga").value = Penjualan.numberFormat(total);
   },
-
+  //untuk perhitungan keseluruhan
   calculateAll() {
     Penjualan.calculate();
+    // untuk menghapus koma supaya terbaca integer
     let inputBayar = parseInt(Penjualan.deleteComma(document.querySelector("#inputBayar").value));
     Penjualan.totalPayment = inputBayar;
     document.querySelector("#inputDiterima").value = isNaN(inputBayar) ? 0 : Penjualan.numberFormat(inputBayar);
-
+    //untuk kaalkulasikan input bayar dan dikembalikan
     let kembalian = inputBayar - Penjualan.totalOrder;
     document.querySelector("#inputKembalian").value = isNaN(kembalian) ? 0 : Penjualan.numberFormat(kembalian);
   },
-
+//untuk mengubah nonber number 1. 2.
   reIndexRow() {
     let listRow = document.querySelectorAll(".index-row");
     let lisBtnDelete = document.querySelectorAll(".btn-delete");
@@ -190,7 +212,7 @@ let Penjualan = {
       lisBtnDelete[i].setAttribute("onclick", `Penjualan.deleteRow('${i + 1}')`);
     }
   },
-
+  // delet row untuk mendelet yanag udah disiap kan
   deleteRow(index) {
     let row = document.querySelector("#row-" + index);
     row.remove();
@@ -198,5 +220,8 @@ let Penjualan = {
   }
 };
 
+
+//untuk memngil keseluruhan dan menjalan kan 
 Penjualan.initSearchProduct();
+//mengaplikasi nak nomber format 
 Penjualan.bindNumberFormat();

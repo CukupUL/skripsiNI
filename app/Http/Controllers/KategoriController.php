@@ -14,19 +14,22 @@ class KategoriController extends Controller
      */
     public function index()
     {
+        // untuk memngil tampilan dari file kategori.index
         return view('kategori.index');
     }
 
     public function data()
     {
+        //mengunakan laravel data table yajra dengan beberapa instalasi yajra
         //ambil kategori yanag udah di dekler diatas setelah itu orderBy untuk memilih 
         $kategori = Kategori::orderBy('id_kategori', 'asc')->get();
-        //datatables untuk melihatkan tampilan supasingkat
+        //datatables untuk melihatkan tampilan menguanakn iloquent
         return datatables()
-                //kategori dari mana "of"
+            //kategori dari mana "of"
             ->of($kategori)
+            //sudah disediakan oleh datatable dan ditambahakan addIndexColumn untuk memunculkan semau data yanag dibutuhkan pada index.blade.php
             ->addIndexColumn()
-            //untuk aksei
+            //untuk menambahkan aksi untuk semau tampilan jadi dibawah ketika di click maka akan mendairek ke fungsi dari kategori.update dan ada dua tampilan yaitu delet maka akn di arahkan ke fungsi delet
             ->addColumn('aksi', function ($kategori) {
                 return '
                 <div class="btn-group">
@@ -37,6 +40,7 @@ class KategoriController extends Controller
             })
             //rawkolom untuk retrun di viewe supaya kebaca html
             ->rawColumns(['aksi'])
+
             ->make(true);
     }
 
@@ -58,6 +62,7 @@ class KategoriController extends Controller
      */
     public function store(Request $request)
     {
+        //membuat kategori baru lalau disimpan di tabel kategori setaleh itu di save pada database
         $kategori = new Kategori();
         $kategori->nama_kategori = $request->nama_kategori;
         $kategori->save();
@@ -73,6 +78,7 @@ class KategoriController extends Controller
      */
     public function show($id)
     {
+        //untuk memunculkan data yang akan di edit pada kolom 
         $kategori = Kategori::find($id);
 
         return response()->json($kategori);
@@ -98,6 +104,7 @@ class KategoriController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //memberikan fungsi pada kategori
         $kategori = Kategori::find($id);
         $kategori->nama_kategori = $request->nama_kategori;
         $kategori->update();
@@ -113,6 +120,7 @@ class KategoriController extends Controller
      */
     public function destroy($id)
     {
+        //fungsi untuk delet data
         $kategori = Kategori::find($id);
         $kategori->delete();
 

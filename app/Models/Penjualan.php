@@ -12,6 +12,7 @@ class Penjualan extends Model
     protected $primaryKey = 'id_penjualan';
     protected $guarded = [];
 
+    // mengunakan eloquent dan hasMany untuk digunain di table parent (foreign key user_id)
     public function detail()
     {
         return $this->hasMany(PenjualanDetail::class, 'id_penjualan', 'id_penjualan');

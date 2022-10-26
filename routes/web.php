@@ -41,7 +41,7 @@ Route::middleware([
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 });
 
-
+// untuk mengkelompokan karna sudah mengunakan login dan simpan
 Route::group(['middleware' => 'auth'], function () {
     //ambil kategori kontroler langsung kedata = name('kategori.data') utuk menyederhanaan peroses pemanggilan
     Route::get('/kategori/data', [KategoriController::class, 'data'])->name('kategori.data');

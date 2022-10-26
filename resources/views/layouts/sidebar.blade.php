@@ -7,8 +7,9 @@
         <div class="info">
           <a href="/profile" class="d-block">
             <p>
-              <!-- untuk memanggil nama siap yang login -->
-          {{ config ('app.name') }}  -  {{ auth()->user()->name }}
+              <!-- untuk memanggil nama siap yang login berdasarkan username dan nama aplikasi pada root dengan memasukan {{ config ('app.name')}} yg ambil dari file .env-->
+              <!-- {{ config ('app.name') }} helpers dari laravel -->
+              {{ config ('app.name') }}  -  {{ auth()->user()->name }}
             </p> 
           </a>
         </div>
@@ -86,7 +87,7 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/penjualan" class="nav-link">
+                <a href="/penjualan " class="nav-link">
                   <i class="fa fa-shopping-basket nav-icon"></i>
                   <p>Penjualan</p>
                 </a>

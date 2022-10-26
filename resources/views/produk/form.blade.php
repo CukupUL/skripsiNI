@@ -13,7 +13,7 @@
       <div class="modal-body">
         <div class="form-group row">
             <!-- memanggil data base -->
-            <label for="nama_produk" class="col-md-2 col-md-offset-1 control-lable">Nama</label>
+            <label for="nama_produk" class="col-md-2 col-md-offset-1 control-lable" autofocus >Nama</label>
             <div class="col-md-9">
                 <input type="text" name="nama_produk" id="nama_produk" class="form-control" required autofocus>
                 <span class="help-block with-errors"></span>

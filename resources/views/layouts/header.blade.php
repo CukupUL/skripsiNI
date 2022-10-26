@@ -20,13 +20,14 @@
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
-          <!-- untuk keluar dari tampilan dashboard -->
+          <!-- untuk keluar dari tampilan dashboard // dengan menyamakan (logout-form) dalam line 30 yanag sama -->
           <span class=" " onclick="document.getElementById('logout-form').submit()" > <i class="fas fa-sign-out-alt"></i> </span>
         </a>
       </li>
     </ul>
   </nav>
 
+  <!-- menambahkan aksi dengan membuat form dengan post metode aktion nay ke rout ke lougot dan di tambahkan token  // proses mengunakan id (lougout-form) dari line 24 -->
   <form action="{{ route('logout') }}" method="post" id="logout-form" style="display: none;">
   @csrf
   </form>

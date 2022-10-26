@@ -50,9 +50,9 @@ class PenjualanController extends Controller
         $response->status = FALSE;
         $response->data = [];
 
-        $get_produk = Produk::where("stok", ">", 0)->where(function($query)  {
+        $get_produk = Produk::where("stok", ">", 0)->where('tgl_exp', '>', date('Y-m-d'))->where(function($query)  {
             $query->where("kode_produk", "LIKE", "%" . \request()->kode . "%")->orWhere("nama_produk", "LIKE", "%" . \request()->kode . "%");
-        })->orderBy('tgl_exp', 'asc')
+        })->orderBy('tgl_exp', 'asc') 
         ->get();
         if (\count($get_produk) > 0) {
             $response->status = TRUE;
@@ -86,7 +86,7 @@ class PenjualanController extends Controller
             "jumlah.*" => "required|string",
             "bayar" => "required|string"
         ]);
-        // Memulai transaksi database 
+        // Memulai transaksi database untuk menjamin data kita berjalan dengan baik
         DB::beginTransaction();
 
         try {
@@ -117,29 +117,30 @@ class PenjualanController extends Controller
                 // Jika jumlahnya 0, maka skip
                 if ($jumlah > 0) {
                     // Set values produk
+                    //aray dalam arai
                     $values_produk[] = [
                         "id_produk" => $request->id_produk[$i],
                         "harga_jual" => $harga_jual,
                         "jumlah" => $jumlah,
                         "subtotal" => $harga_jual * $jumlah
                     ];
-                    // Increment total harga
+                    // untuk mengkalkulasikan harghga jual di tambah harga harga
                     $total_harga += $harga_jual * $jumlah;
     
-                    // Update stok produk
+                    // Update stok produk berdasarkan jumalah sistem dan di kurnagi dari pembalian
                     $produk->update([
                         "stok" => $produk->stok - $jumlah
                     ]);
                 }
             }
 
-            // Jika values produk kosong, maka skip
+            // Jika values produk kosong, maka skip // pengecekan 
             if (\count($values_produk) > 0) {
                 // Hitung total produk yang di input
                 $total_item = \count($values_produk);
                 // Ubah values produk menjadi tipe data collection
                 $values_produk = \collect($values_produk);
-                // Hapus koma dari inputan bayar
+                // Hapus koma dari inputan bayar akan disi olah bayar dari user
                 $bayar = \str_replace(",", "", $request->bayar);
                 
                 // Jika pembayaran nya sama dengan atau lebih besar dari total harga
@@ -147,13 +148,13 @@ class PenjualanController extends Controller
                     // Set kembalian jika ada
                     $kembalian = $bayar - $total_harga;
 
-                    // Set pembayaran yang diterima
+                    // Set pembayaran yang diterima pegkondisian 
                     $diterima = $bayar;
                     if ($bayar > $total_harga) {
                         $diterima = $total_harga;
                     }
 
-                    // Set values penjualan nya
+                    // Set values penjualan nya isian
                     $values_penjualan = [
                         "no_penjualan" => \rand(100, 1000000),
                         "total_item" => $total_item,
@@ -164,20 +165,22 @@ class PenjualanController extends Controller
                         "id_user" => Auth::user()->id
                     ];
 
-                    // Insert kedalam table penjualan
+                    // Insert kedalam table penjualan kirim  eloqwin 
                     $penjualan = Penjualan::create($values_penjualan);
-
+                    //mengubah koleksi data dan mengulang ngulang // untuk mengambil callback mengunakan = use
                     // Karena values produk tadi sudah diubah menjadi tipe data collection, maka kita bisa manipulasi data nya
                     $values_produk->map(function($produk) use ($penjualan) {
                         // Map untuk menambahkan data baru yaitu ID Penjualan
                         $produk["id_penjualan"] = $penjualan->id_penjualan;
                         return $produk;
+                        //untuk disimpan dalam prodak = v_produk
                     })->each(function($v_produk) {
                         // Setiap data, insert / masukan kedalam table penjualan detail
                         PenjualanDetail::create($v_produk);
                     });
 
                     // jika tidak ada kesalahan dalam query / kode PHP, maka commit / realisasikan query
+                    //DB::commit membari ahu mysql sudah selesai dang merealisasikan code kirim mysql
                     DB::commit();
                     return \redirect("/penjualan/$penjualan->id_penjualan")->with("message", "<script>alert('Berhasil membuat penjualan!')</script>");   
                 }

@@ -23,15 +23,15 @@
       </tr>
       <tr>
         <th>Dibayar</th>
-        <td>: {{ number_format($penjualan->bayar) }}</td>
+        <td>: {{ format_uang($penjualan->bayar) }}</td>
       </tr>
       <tr>
         <th>Diterima</th>
-        <td>: {{ number_format($penjualan->diterima) }}</td>
+        <td>: {{ format_uang($penjualan->diterima) }}</td>
       </tr>
       <tr>
         <th>Kembalian</th>
-        <td>: {{ number_format($penjualan->kembalian) }}</td>
+        <td>: {{ format_uang($penjualan->kembalian) }}</td>
       </tr>
     </table>
   </div>
@@ -55,8 +55,8 @@
           <tr>
             <td>{{ $item->product->nama_produk }}</td>
             <td>{{ $item->jumlah }}</td>
-            <td>{{ number_format($item->harga_jual) }}</td>
-            <td>{{ number_format($item->subtotal) }}</td>
+            <td>{{ format_uang($item->harga_jual) }}</td>
+            <td>{{ format_uang($item->subtotal) }}</td>
           </tr>
         @endforeach
       </tbody>

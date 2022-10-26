@@ -40,6 +40,9 @@ class ProdukController extends Controller
             ->addColumn('stok', function ($produk) {
                 return format_uang($produk->stok);
             })
+            ->addColumn('updated_at', function($produk) {
+                return date('j F Y H:i', strtotime($produk->updated_at));
+            })
 
             ->addColumn('aksi', function ($produk) {
                 return '

@@ -26,7 +26,7 @@ class ExpController extends Controller
 
     public function data()
     {
-        // Set tanggal maksimal expired
+        // Set tanggal maksimal expired // Carbon untuk memudahkan kita memanipulasi tanggal ataupun jam menggunakan PHP
         $date_expired = Carbon::now()->addMonth(1);
 
         // Get data menggunakan eloquent

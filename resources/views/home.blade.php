@@ -1,15 +1,18 @@
+<!-- menerapkan konsep tmplate laravel inheritance -->
 @extends('layouts.master') 
 <!--extends untuk memanggil dari folder layouts.master -->
-
+<!-- untuk memberikan nama pada pencarian diatas setelah nay nama apotek di tuliskan  semau akan memagil ke dalah home ini-->
 @section('title')
     Dashboard
 @endsection
 
+<!-- memangil dalam bentukan yanag dinamis dan akan di simpan dinamis ketika perintah tersebut digantikan yanag berhubungan dengan master.blade -->
 @section('breadcrumb')
     @parent
     <li class="breadcrumb-item active">Dashboard</li>
 @endsection
 
+<!-- dengan membuat dinamis akan memudahkan dalam pengantian dan master hanay menampilkan templat yanag ada -->
 @section('content')
 <div class="container-fluid">
         <!-- Small boxes (Stat box) -->

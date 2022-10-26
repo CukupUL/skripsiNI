@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- @yield('title') = memangguil dari kelas turunan nya -->
+  <!-- @yield('title') = memanggil dari kelas turunan nya untuk di simpan di bagian atan pencarian -->
   <title>{{ config('app.name') }} | @yield('title')</title>
+  <!-- untuk menambahkan csrf-token pada semau file -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <!-- Google Font: Source Sans Pro -->
@@ -56,7 +57,7 @@
   </div>
 
   <!-- Navbar 
-  mengambil dari header.blade.php mengunakan includeIF untuk ketida file nay ga ada ga akan tampil eror
+  mengambil dari header.blade.php mengunakan includeIF untuk ketida file nya ga ada ga akan tampil eror
   -->
     @includeIf('layouts.header')
   <!-- /.navbar -->
@@ -64,7 +65,7 @@
   <!-- Main Sidebar Container -->
   @includeIf('layouts.sidebar')
 
-  <!-- Content Wrapper. Contains page content -->
+  <!-- untuk mengisi turunan dari title atas maka di tambaghakan @yield('title') -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -72,9 +73,10 @@
         <div class="row mb-2">
           <div class="col-sm-6">
             <h1 class="m-0"> @yield('title') </h1>
-          </div><!-- /.col -->
+          </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
+              <!-- Untuk menambahkan nama dan bisa di pangil secara keseleuruhan secara dinamis pada file home.blade  -->
               @section('breadcrumb')
                 <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
               @show
@@ -84,7 +86,7 @@
       </div>
     </div>
 
-    <!-- Main content -->
+    <!-- mengunakan yield untuk mendinamiskan dan bersambungan dengan file home.blade  -->
     <section class="content">
 
     @yield('content')
@@ -157,7 +159,9 @@
 <script src="/js/validator.min.js"></script>
 
 <!-- fiktur dari laravel yanag secara otomatisa kan menampilkan data yang di panggil -->
+<!-- @stack('scripts') = untuk memeberikan perintah pada laravel supaya dapat mencari scripts yanag akan di insert pada setiap file nya -->
 @stack('scripts')
+
 @if (session("message"))
   {!! session("message") !!}
 @endif

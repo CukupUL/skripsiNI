@@ -28,6 +28,7 @@
                         <th>Harga jual</th>
                         <th>Stok</th>
                         <th>Tgl Exp</th> 
+                        <th>Last Update</th>
                         <th width="15%"><i class="fa fa-cog"></i></th>
                     </thead>
                 </table>
@@ -64,6 +65,7 @@
                 {data: 'harga_jual', sortable: false},
                 {data: 'stok', sortable: false},
                 {data: 'tgl_exp', sortable: false},
+                {data: 'updated_at', sortable: false},
                 {data: 'aksi', searchable: false, sortable: false},
             ]
         });
